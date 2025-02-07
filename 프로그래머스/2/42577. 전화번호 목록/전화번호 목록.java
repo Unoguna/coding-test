@@ -10,7 +10,7 @@ class Solution {
             String str1 = new String(phone_book[i]);
             String str2 = new String(phone_book[i+1]);
             
-            if(str1.length() < str2.length() && str1.equals(str2.substring(0,str1.length()))){
+            if(str2.startsWith(str1)){
                 return false;
             }
         }
