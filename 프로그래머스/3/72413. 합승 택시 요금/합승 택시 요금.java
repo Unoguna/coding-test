@@ -23,7 +23,6 @@ class Solution {
         int ans = 0;
         for(int i = 1; i <= n; i++){            
             int [] alone = dijstra(i);
-            if(ans == 0) ans = togther[i]+alone[a]+alone[b];
             ans = Math.min(ans, togther[i]+alone[a]+alone[b]);
         }
         return ans;
