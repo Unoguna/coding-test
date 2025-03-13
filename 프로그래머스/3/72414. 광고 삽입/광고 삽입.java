@@ -1,66 +1,72 @@
-class Solution {
-    public String solution(String play_time, String adv_time, String[] logs) {
-		int play_len = timeToInt(play_time);
-		int adv_len = timeToInt(adv_time);
-		
-		int[] ad = new int[360_000];
-		
-		for(String log : logs) {
-			String[] l = log.split("-");
-			int start = timeToInt(l[0]);
-			int end =  timeToInt(l[1]);
-			for(int i=start; i<end; i++) {
-				ad[i]++;
-			}
-		}
-		
-		int max_idx=0;
-		long max_sum=0;
-		long sum =0;
-		for(int i=0; i<adv_len; i++) {
-			sum += ad[i];
-		}
-		max_sum = sum;
-		
-		for(int i = adv_len; i<play_len; i++) {
-			sum += ad[i] - ad[i-adv_len];
-			if(sum > max_sum) {
-				max_sum = sum;
-				max_idx = i-adv_len+1;
-			}
-		}
-		
-		return timeToString(max_idx);
+import java.util.*;
 
+class Solution {
+    
+    public int convert(String string){
+        String[] str = string.split(":");
+        int[] time = new int[3];
+        
+        for(int i=0; i<3; i++){
+            time[i] = Integer.parseInt(str[i]);
+        }
+        
+        return time[0] * 3600 + time[1] * 60 + time[2];
     }
-  static int timeToInt(String time) {
-		String[] times = time.split(":");
-		int toSec = 3600;
-		int totalTime = 0;
-		for(String t : times) {
-			int num = Integer.parseInt(t);
-			totalTime += num*toSec;
-			toSec /= 60;
-		}
-		return totalTime;
-	}
-	
-	static String timeToString(int time) {
-		String t = "";
-		int hour = time/3600;
-		time %= 3600;
-		if(hour <10) t+= "0"+ hour +":";
-		else t += hour+":";
-		
-		int minute = time/60;
-		time %= 60;
-		if(minute <10) t+= "0"+ minute+":";
-		else t += minute+":";
-		
-		int second = time;
-		if(second <10) t+= "0"+ second;
-		else t += second;
-		
-		return t;
-	}
+    
+    public String solution(String play_time, String adv_time, String[] logs) {
+        String answer = "";
+        int playTime = convert(play_time);
+        int advTime = convert(adv_time);
+        
+        int[] check = new int[360_000];
+        
+        for(String log : logs){
+            String[] str = log.split("-");
+            int time1 = convert(str[0]);
+            int time2 = convert(str[1]);
+            for(int i=time1; i<time2; i++){
+                check[i]++;
+            }
+        }
+        
+        long max = 0;
+        int answerInt = 0;
+        long max_sum;
+        
+        for(int i=0; i<advTime; i++){
+            max += Long.valueOf(check[i]);
+        }
+        max_sum = max;
+        
+        for(int i=advTime; i<playTime; i++){
+            max += Long.valueOf(check[i] - check[i - advTime]);
+            
+            if(max_sum < max){
+                max_sum = max;
+                answerInt = i + 1 - advTime;
+            }
+        }
+        
+        int[] a = new int[3];
+        a[0] = answerInt/3600;
+        a[1] = (answerInt%3600)/60;
+        a[2] = answerInt%60;
+        
+        if(a[0]/10 == 0){
+            answer += "0";
+        }
+        answer += Integer.toString(a[0]);
+        answer += ":";
+        if(a[1]/10 == 0){
+            answer += "0";
+        }
+        answer += Integer.toString(a[1]);
+        answer += ":";
+        if(a[2]/10 == 0){
+            answer += "0";
+        }
+        answer += Integer.toString(a[2]);
+        
+        return answer;
+    }
 }
