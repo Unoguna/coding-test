@@ -8,8 +8,10 @@ class Solution {
         
         for(int i=1; i<r2; i++){
             
-            long tmp1 = (long)Math.pow(r2,2);
-            long tmp2 = (long)Math.pow(i,2);
+            // long tmp1 = (long)Math.pow(r2,2);
+            // long tmp2 = (long)Math.pow(i,2);
+            long tmp1 = (long)r2 * r2;
+            long tmp2 = (long)i * i;
             
             long top = (long)Math.floor(Math.sqrt(tmp1 - tmp2));
             answer += top * 4;
